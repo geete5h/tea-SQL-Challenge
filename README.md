@@ -197,4 +197,4 @@ The product in the warehouse having the highest gross profit amount is **Air cus
 The Median Gross Profit Amount among all the products in the warehouse is **$8.91**
 
 
-The Estimated Time taken to complete the challenge is 180 minutes.
+The Estimated Time taken to complete the challenge is 160 minutes.
