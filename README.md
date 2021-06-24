@@ -163,3 +163,38 @@ GROUP BY SupplierID) AvgInv ON AvgInv.SupplierID = Purchasing.Suppliers.Supplier
 ### Challenge 4
 Using "unit price" and "recommended retail price", which item in the warehouse has the lowest gross profit amount? Which item has the highest? What is the median gross profit across all items in the warehouse?
 #### Solution:
+```
+-- Least Gross Profit Amount
+SELECT StockItemName, (RecommendedRetailPrice-UnitPrice) AS [Lowest Gross Profit Amount ($)] FROM Warehouse.StockItems
+WHERE 
+(RecommendedRetailPrice-UnitPrice) = (SELECT MIN(RecommendedRetailPrice-UnitPrice)
+FROM Warehouse.StockItems)
+
+-- Highest Gross Profit Amount
+SELECT StockItemName, (RecommendedRetailPrice-UnitPrice) AS [Highest Gross Profit Amount ($)] FROM Warehouse.StockItems
+WHERE 
+(RecommendedRetailPrice-UnitPrice) = (SELECT MAX(RecommendedRetailPrice-UnitPrice)
+FROM Warehouse.StockItems)
+
+
+-- Median Gross Profit Amount
+SELECT
+(
+ (SELECT MAX(gProfit) FROM
+   (SELECT TOP 50 PERCENT (gProfit) FROM (SELECT (Warehouse.StockItems.RecommendedRetailPrice-Warehouse.StockItems.UnitPrice) AS gProfit
+FROM Warehouse.StockItems) A ORDER BY (gProfit)) AS BottomHalf)
+ +
+ (SELECT MIN(gProfit) FROM
+   (SELECT TOP 50 PERCENT (gProfit) FROM (SELECT (Warehouse.StockItems.RecommendedRetailPrice-Warehouse.StockItems.UnitPrice) AS gProfit
+FROM Warehouse.StockItems) B ORDER BY (gProfit) DESC) AS TopHalf)
+) / 2 AS [Median Gross Profit Amount ($)]
+```
+
+![image](https://user-images.githubusercontent.com/33748024/123337742-4b53b400-d50d-11eb-8fb8-9699c9face56.png)
+
+The product in the warehouse having the lowest gross profit amount is **3 kg Courier post bag (White) 300x190x95mm**.
+The product in the warehouse having the highest gross profit amount is **Air cushion machine (Blue)**.
+The Median Gross Profit Amount among all the products in the warehouse is **$8.91**
+
+
+The Estimated Time taken to complete the challenge is 180 minutes.
